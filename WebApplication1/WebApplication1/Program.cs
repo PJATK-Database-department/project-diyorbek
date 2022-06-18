@@ -1,4 +1,3 @@
-using WebApplication1.Data;
 using WebApplication1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
