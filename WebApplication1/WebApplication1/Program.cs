@@ -1,9 +1,13 @@
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPolygonService, PolygonService>();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
