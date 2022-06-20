@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Company> Companies { get; set; }
-    public DbSet<Wishlist> Wishlists { get; set; }
+    public DbSet<Watchlist> Watchlists { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -30,6 +30,6 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema("polygon");
-        modelBuilder.Entity<Wishlist>().HasKey(l => new {l.Login, l.Ticker});
+        modelBuilder.Entity<Watchlist>().HasKey(l => new {l.Login, l.Ticker});
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models;
 
-public class Wishlist
+public class Watchlist
 {
     [Key] public string Login { get; set; }
     [Key] public string Ticker { get; set; }
