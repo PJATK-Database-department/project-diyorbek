@@ -1,4 +1,18 @@
 @page "/"
+@using WebApplication1.Services
+@inject IPolygonService _polygonService
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var r = await _polygonService.GetCompanyInfo("TSLA");
+
+        Console.WriteLine(r.Name);
+        Console.WriteLine(r.Descripton);
+    }
+
+}
 
 <PageTitle>Index</PageTitle>
 
