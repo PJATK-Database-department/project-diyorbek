@@ -93,10 +93,9 @@ public class PolygonService : IPolygonService
 
         return response;
     }
+}
 
-
-    private class ResponseDto<T>
-    {
-        [JsonPropertyName("results")] public T Results { get; set; }
-    }
+public class ResponseDto<T>
+{
+    [JsonPropertyName("results")] public T Results { get; set; }
 }
