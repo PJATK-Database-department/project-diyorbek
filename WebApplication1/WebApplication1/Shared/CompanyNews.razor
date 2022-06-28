@@ -1,0 +1,38 @@
+@using WebApplication1.DTOs
+<div class="container mb-5">
+
+    <h5>CompanyNews</h5>
+
+    @if (content == null || !content.Any())
+    {
+        <p>No news</p>
+    }
+    else
+    {
+        @foreach (var news in content)
+        {
+            <div class="row mt-3">
+                <div class="col-6">
+
+                    <a href="@news.Url" class="text-decoration-none" target="_blank">
+                        <h5>@news.Title</h5>
+                    </a>
+                    <div class="row">
+                        <div class="col">
+                            <b>@news.Author</b>
+                        </div>
+                        <div class="col-2">@news.PublishDate.Value.ToShortDateString()</div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+@code {
+
+    [Parameter]
+    public IEnumerable<CompanyNewsDto> content { get; set; }
+
+}

@@ -60,3 +60,9 @@
 /Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/obj/Debug/net6.0/WebApplication1.pdb
 /Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/obj/Debug/net6.0/WebApplication1.genruntimeconfig.cache
 /Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/obj/Debug/net6.0/ref/WebApplication1.dll
+/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/bin/Debug/net6.0/Newtonsoft.Json.dll
+/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/bin/Debug/net6.0/Syncfusion.Blazor.dll
+/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/bin/Debug/net6.0/Syncfusion.ExcelExport.Net.dll
+/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/bin/Debug/net6.0/Syncfusion.Licensing.dll
+/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/bin/Debug/net6.0/Syncfusion.PdfExport.Net.dll
+/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/bin/Debug/net6.0/Syncfusion.Blazor.Themes.dll

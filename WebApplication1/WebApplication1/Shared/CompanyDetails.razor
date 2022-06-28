@@ -1,0 +1,101 @@
+@using WebApplication1.Services
+@using WebApplication1.DTOs
+@inject IConfiguration _configuration
+@inject IWatchlistService _watchlistService
+
+
+<div class="my-5">
+    <div class="container">
+        @if (company == null)
+        {
+            <p>No data</p>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col">
+                    <h3>@company.Name</h3>
+                </div>
+                <div class="col-2">
+                    @if (shouldShowAddWatchlist)
+                    {
+                        <button disabled="@isAdding" type="button" class="btn btn-success rounded" @onclick="Callback">
+                            Add to Watchlist
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-2">
+                    @if (company.Branding == null)
+                    {
+                        <div style="width:100px; height: 100px" class="justify-content-center border d-flex align-items-center border-dark">
+                            <span>No logo</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <img style="width:100px" class="border border-dark" src="@company.Branding?.IconUrl?apiKey=@_configuration["POLYGON_API_KEY"]" alt="@company.Name logo"/>
+                    }
+                </div>
+                <div class="col-3">
+                    <p>
+                        <b>Ticker:</b> @company.Ticker
+                    </p>
+                    @if (company.Type != null)
+                    {
+                        <p>
+                            <b>Type:</b> @company.Type
+                        </p>
+                    }
+                    @if (company.TotalEmployees != null)
+                    {
+                        <p>
+                            <b>Employees:</b> @company.TotalEmployees
+                        </p>
+                    }
+                </div>
+                <div class="col-6">
+                    <p><b>Location:</b> @company.Address?.State, @company.Address?.City, @company.Address?.Address1</p>
+                    @if (company.PhoneNumber != null)
+                    {
+                        <p>
+                            <b>Contacts:</b> @company.PhoneNumber
+                        </p>
+                    }
+                </div>
+            </div>
+            @if (company.Description != null)
+            {
+                <div class="row">
+                    <p>
+                        @company.Description
+                    </p>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public CompanyDto company { get; set; }
+
+    [Parameter]
+    public EventCallback<Task> OnAddWatchlist { get; set; }
+
+    [Parameter]
+    public bool shouldShowAddWatchlist { get; set; }
+
+    [Parameter]
+    public bool isAdding { get; set; }
+
+
+    private void Callback()
+    {
+        OnAddWatchlist.InvokeAsync();
+    }
+
+}

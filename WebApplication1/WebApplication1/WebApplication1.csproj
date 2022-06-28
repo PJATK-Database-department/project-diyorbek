@@ -13,6 +13,8 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Syncfusion.Blazor" Version="20.1.0.61" />
+      <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.61" />
     </ItemGroup>
 
 </Project>

@@ -35,6 +35,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVnaXN0ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/Pages/Watchlist.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvV2F0Y2hsaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/Shared/CompanyDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0NvbXBhbnlEZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/Shared/CompanyNews.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL0NvbXBhbnlOZXdzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/Shared/PriceChart.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1ByaWNlQ2hhcnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/Shared/Searchbar.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1NlYXJjaGJhci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/diyorbeksadullaev/Documents/Projects/APBD/project-diyorbek/WebApplication1/WebApplication1/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1N1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

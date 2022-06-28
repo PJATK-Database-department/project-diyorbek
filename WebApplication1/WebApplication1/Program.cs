@@ -1,3 +1,5 @@
+using Syncfusion.Blazor;
+using Syncfusion.Licensing;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
@@ -7,6 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPolygonService, PolygonService>();
+builder.Services.AddScoped<IWatchlistService, WatchlistService>();
+
+SyncfusionLicenseProvider.RegisterLicense(
+    "NjQ5NzQyQDMyMzAyZTMxMmUzMFBmemJXSWlIN1NUb2E5Z09BQ1lWdFAxdmxOcEhXTjZkQmFRUjNRTE9SQ2c9");
+
+builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

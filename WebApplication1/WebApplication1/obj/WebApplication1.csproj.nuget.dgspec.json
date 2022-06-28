@@ -51,6 +51,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.6, )"
+            },
+            "Syncfusion.Blazor": {
+              "target": "Package",
+              "version": "[20.1.0.61, )"
+            },
+            "Syncfusion.Blazor.Themes": {
+              "target": "Package",
+              "version": "[20.1.0.61, )"
             }
           },
           "imports": [

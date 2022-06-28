@@ -1,0 +1,75 @@
+@using WebApplication1.DTOs
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+@if (DataSource == null)
+{
+    <div class="stockchartloader">
+        No data
+    </div>
+}
+else
+{
+    <div class="container mb-5 mt-5">
+        <div class="@loadDiv">
+            <SfStockChart Title="AAPL Stock Price" Theme="@theme">
+                <StockChartEvents OnLoaded="@ChartLoaded"></StockChartEvents>
+                <StockChartPrimaryXAxis>
+                    <StockChartAxisMajorGridLines Width="0"></StockChartAxisMajorGridLines>
+                    <StockChartAxisCrosshairTooltip Enable="true"></StockChartAxisCrosshairTooltip>
+                </StockChartPrimaryXAxis>
+                <StockChartPrimaryYAxis>
+                    <StockChartAxisLineStyle Width="0"></StockChartAxisLineStyle>
+                    <StockChartAxisMajorTickLines Width="0"></StockChartAxisMajorTickLines>
+                </StockChartPrimaryYAxis>
+                <StockChartSeriesCollection>
+                    <StockChartSeries DataSource="@DataSource" Type="ChartSeriesType.HiloOpenClose" XName="x"></StockChartSeries>
+                </StockChartSeriesCollection>
+                <StockChartChartArea>
+                    <StockChartChartAreaBorder Width="0"></StockChartChartAreaBorder>
+                </StockChartChartArea>
+            </SfStockChart>
+        </div>
+    </div>
+
+    <style>
+        .stockchartloader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #7a0fff;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 46%;
+            left: 46%;
+            border-radius: 50%;
+            -webkit-animation: loader 2s linear infinite;
+            animation: loader 2s linear infinite;
+        }
+        .stockchartdiv {
+            visibility: hidden;
+        }
+    </style>
+}
+
+@code{
+
+    [Parameter]
+    public PriceChartData[] DataSource { get; set; }
+
+    string loadClass = "stockchartloader";
+    string loadDiv = "stockchartdiv";
+
+    void ChartLoaded(StockChartEventArgs args)
+    {
+        loadClass = "";
+        loadDiv = "";
+        StateHasChanged();
+    }
+
+    readonly Theme theme = Theme.Bootstrap4;
+    // void BeforeRender()
+    // {
+    //     theme = ThemeHelper.GetCurrentTheme(NavigationManager.Uri);
+    // }
+}
