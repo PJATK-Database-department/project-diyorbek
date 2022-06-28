@@ -1,0 +1,93 @@
+@page "/register"
+@using WebApplication1.Services
+@using WebApplication1.DTOs
+@inject IUserService _userService
+@inject NavigationManager Navigation
+
+<PageTitle>Register</PageTitle>
+
+
+<div class="mx-auto" style="max-width: 400px">
+    <h3 class="mb-5 text-center">Register</h3>
+
+    <EditForm EditContext="@editContext" OnSubmit="OnFormSubmit">
+        <DataAnnotationsValidator/>
+
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input autocomplete="off" id="form2Example1" @bind-Value:event="onchange" @bind-Value="_registerUserDto.Login" class="form-control"/>
+            <label class="form-label" for="form2Example1">Login</label>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="form2Example2" @bind-Value:event="onchange" @bind-Value="_registerUserDto.Password" class="form-control"/>
+            <label class="form-label" for="form2Example2">Password</label>
+        </div>
+
+        <div class="form-outline mb-4">
+            <input type="password" id="form2Example3" @bind-Value:event="onchange" @bind-Value="_registerUserDto.RepeatPassword" class="form-control"/>
+            <label class="form-label" for="form2Example3">Repeat Password</label>
+        </div>
+
+        <div class="form-outline mb-4">
+            <input id="form2Example4" @bind-Value:event="onchange" @bind-Value="_registerUserDto.Email" class="form-control"/>
+            <label class="form-label" for="form2Example4">E-mail</label>
+        </div>
+
+        @if (_errorMessage != null)
+        {
+            <div class="form-outline mb-4">
+                <label class="form-label text-danger">@_errorMessage</label>
+            </div>
+        }
+
+        <!-- Submit button -->
+        <button disabled="@_loading" type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>Already a member? <a href="/login">Login</a></p>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private string? _errorMessage;
+    private readonly RegisterUserDto _registerUserDto = new();
+    private EditContext? editContext;
+    private bool _loading;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(_registerUserDto);
+    }
+
+    private async Task OnFormSubmit()
+    {
+        if (editContext != null && editContext.Validate())
+        {
+            try
+            {
+                _loading = true;
+                _errorMessage = null;
+                await _userService.RegisterAsync(_registerUserDto);
+                Navigation.NavigateTo("/login");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                _errorMessage = e.Message;
+            }
+            finally
+            {
+                _loading = false;
+            }
+        }
+        else
+        {
+            _errorMessage = "Invalid form values";
+        }
+    }
+
+}

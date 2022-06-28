@@ -19,8 +19,7 @@ public class UserService : IUserService
         var existingUser = await _context.Users.SingleOrDefaultAsync(user => user.Login == registerUserDto.Login);
 
         if (existingUser != null)
-            throw new Exception();
-        // return new RegisterResponseErrorDto {Message = "User exists"};
+            throw new Exception("User exists");
 
         var salt = PasswordHelper.GetSecureSalt();
         var passwordHash = PasswordHelper.HashUsingPbkdf2(registerUserDto.Password, salt);
@@ -28,14 +27,15 @@ public class UserService : IUserService
         {
             Login = registerUserDto.Login,
             PasswordHash = passwordHash,
-            PasswordSalt = Convert.ToBase64String(salt)
+            PasswordSalt = Convert.ToBase64String(salt),
+            Email = registerUserDto.Email
         };
 
         await _context.Users.AddAsync(user);
 
         var saveResponse = await _context.SaveChangesAsync();
 
-        if (saveResponse == 0) throw new Exception();
+        if (saveResponse == 0) throw new Exception("Something went wrong");
 
         return user.Login;
     }
@@ -52,7 +52,6 @@ public class UserService : IUserService
 
         if (user.PasswordHash != passwordHash)
             throw new Exception("Invalid Password");
-
         return user.Login;
     }
 }

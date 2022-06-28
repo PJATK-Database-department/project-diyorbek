@@ -1,0 +1,81 @@
+@page "/login"
+@using WebApplication1.Services
+@using WebApplication1.DTOs
+@inject IUserService _userService
+@inject NavigationManager Navigation
+
+<PageTitle>Login</PageTitle>
+
+
+<div class="mx-auto" style="max-width: 400px">
+    <h3 class="mb-5 text-center">Login</h3>
+
+    <EditForm EditContext="editContext" OnValidSubmit="OnFormSubmit">
+        <DataAnnotationsValidator/>
+
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input autocomplete="off" id="form2Example1" @bind-Value="_loginUserDto.Login" @bind-Value:event="onchange" class="form-control"/>
+            <label class="form-label" for="form2Example1">Login</label>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="form2Example2" @bind-Value="_loginUserDto.Password" @bind-Value:event="onchange" class="form-control"/>
+            <label class="form-label" for="form2Example2">Password</label>
+        </div>
+
+        @if (_loading)
+        {
+            <p>Loading...</p>
+        }
+
+        @if (_errorMessage != "")
+        {
+            <div class="form-outline mb-4">
+                <label class="form-label text-danger">@_errorMessage</label>
+            </div>
+        }
+
+        <!-- Submit button -->
+        <button disabled="@_loading" type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>Not a member? <a href="register">Register</a></p>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private string _errorMessage = "";
+    private readonly LoginUserDto _loginUserDto = new();
+    private EditContext? editContext;
+    private bool _loading;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(_loginUserDto);
+    }
+
+    private async Task OnFormSubmit()
+    {
+        try
+        {
+            _errorMessage = "";
+            _loading = true;
+            await _userService.LoginAsync(_loginUserDto);
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            _errorMessage = e.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+}

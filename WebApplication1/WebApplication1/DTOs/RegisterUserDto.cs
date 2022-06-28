@@ -6,6 +6,7 @@ public class RegisterUserDto
 {
     [Required] [MaxLength(100)] public string Login { get; set; }
     [Required] public string Password { get; set; }
+    [Required] public string RepeatPassword { get; set; }
 
     [Required]
     [EmailAddress]
