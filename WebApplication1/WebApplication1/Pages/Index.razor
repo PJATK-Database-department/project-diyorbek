@@ -1,0 +1,100 @@
+@page "/"
+@using WebApplication1.Services
+@using WebApplication1.DTOs
+@inject IPolygonService _polygonService
+@inject IWatchlistService _watchlistService
+
+<PageTitle>Dashboard</PageTitle>
+
+<div class="container">
+    <h1>Dashboard</h1>
+
+    <div class="row">
+        <div class="col">
+            <Searchbar OnChooseCompany="OnChooseCompany"/>
+        </div>
+        <div class="col-2 align-self-end">
+            <NavLink href="/watchlist" class="btn btn-primary">Watchlist</NavLink>
+        </div>
+    </div>
+</div>
+
+@if (_currentCompany != null)
+{
+    <CompanyDetails
+        company="@_currentCompany"
+        OnAddWatchlist="OnAddWatchlist"
+        shouldShowAddWatchlist="@_shouldShowAddWatchlist"
+        isAdding="@_isAdding"/>
+}
+@if (_priceDataSource != null)
+{
+    <PriceChart DataSource="_priceDataSource"/>
+}
+@if (_currentCompanyNews != null)
+{
+    <CompanyNews content="@_currentCompanyNews"/>
+}
+else if (_isLoading)
+{
+    <div class="container mt-5">
+        <p>Loading...</p>
+    </div>
+}
+
+@code {
+    private CompanyDto? _currentCompany;
+    private IEnumerable<CompanyNewsDto>? _currentCompanyNews;
+    private PriceChartData[]? _priceDataSource;
+    private bool _shouldShowAddWatchlist;
+    private bool _isAdding;
+    private bool _isLoading;
+
+
+    private async Task OnChooseCompany(SearchCompanyDto obj)
+    {
+        _isLoading = true;
+        try
+        {
+            _currentCompany = null;
+            _currentCompanyNews = null;
+            _currentCompany = await _polygonService.GetCompanyInfo(obj.Ticker);
+            _shouldShowAddWatchlist = !await _watchlistService.HasUserCompany("tim", obj.Ticker);
+            _currentCompanyNews = await _polygonService.GetCompanyNews(obj.Ticker);
+            _priceDataSource = (await _polygonService.GetPriceData(_currentCompany.Ticker) ?? Array.Empty<PriceChartData>()).ToArray();
+    // StateHasChanged();
+            Console.WriteLine(_priceDataSource.Length);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task OnAddWatchlist()
+    {
+        if (_currentCompany is {Ticker: { } })
+        {
+            try
+            {
+                _isAdding = true;
+                await _watchlistService.AddCompany("tim", _currentCompany.Ticker);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            finally
+            {
+                _isAdding = false;
+                _shouldShowAddWatchlist = !await _watchlistService.HasUserCompany("tim", _currentCompany.Ticker);
+            }
+        }
+    }
+
+}

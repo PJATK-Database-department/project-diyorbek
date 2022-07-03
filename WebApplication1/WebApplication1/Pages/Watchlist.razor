@@ -1,0 +1,139 @@
+@page "/watchlist"
+@using WebApplication1.Services
+@using WebApplication1.DTOs
+@inject IConfiguration _configuration
+@inject IWatchlistService _watchlistService
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Watchlist</h1>
+        </div>
+        <div class="col-2 align-self-center">
+            <NavLink href="/" class="btn btn-primary">Back</NavLink>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (_companies == null)
+        {
+            <p>
+                <em>Loading...</em>
+            </p>
+        }
+        else
+        {
+            <table class="table table-hover table-bordered text-center">
+                <thead>
+                <tr>
+                    <th>Logo</th>
+                    <th role="button" @onclick="() => SortBy(s => s.Ticker)">Ticker</th>
+                    <th role="button" @onclick="() => SortBy(s => s.Name)">Name</th>
+                    <th role="button" @onclick="() => SortBy(s => s.Type)">Type</th>
+                    <th role="button" @onclick="() => SortBy(s => s.TotalEmployees)">Total Employees</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var company in _companies)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            <img src="@company.Branding.LogoUrl?apiKey=@_configuration["POLYGON_API_KEY"]" width="80" alt="avatar"/>
+                        </td>
+                        <td class="align-middle">@company.Ticker</td>
+                        <td class="align-middle">@company.Name</td>
+                        <td class="align-middle">@company.Type</td>
+                        <td class="align-middle">@company.TotalEmployees</td>
+                        <td class="align-middle" @onclick:stopPropagation="true" @onclick:preventDefault="true">
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#exampleModal"
+                                @onclick="() => ShowModal(company.Ticker)">
+                                <span class="oi oi-x"></span>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+@if (Show)
+{
+    <div class="modal fade show" style="display: block" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                </div>
+                <div class="modal-body">
+                    Delete selected company?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseModal">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="RemoveCompany">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Show)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private bool Show { get; set; }
+    private IEnumerable<CompanyDto>? _companies;
+    private string? _selectedTicker;
+    private bool _isAscending;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _companies = await _watchlistService.GetCompanies("tim", 1, 10);
+    }
+
+    private async Task RemoveCompany()
+    {
+        await _watchlistService.DeleteCompany("tim", _selectedTicker);
+        _companies = await _watchlistService.GetCompanies("tim", 1, 10);
+        CloseModal();
+    }
+
+    private void ShowModal(string ticker)
+    {
+        Show = true;
+        _selectedTicker = ticker;
+    }
+
+    private void CloseModal()
+    {
+        Show = false;
+        _selectedTicker = null;
+    }
+
+    private void SortBy<T>(Func<CompanyDto, T> func)
+    {
+        if (!_isAscending)
+        {
+            _companies = _companies?.OrderBy(func).ToArray();
+            _isAscending = true;
+        }
+        else
+        {
+            _companies = _companies?.OrderByDescending(func).ToArray();
+            _isAscending = false;
+        }
+    }
+
+}

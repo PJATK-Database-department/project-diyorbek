@@ -1,0 +1,110 @@
+@using WebApplication1.Services
+@using WebApplication1.DTOs
+@using System.Timers
+@inject IPolygonService _polygonService
+@inject IJSRuntime JsRuntime
+
+<style>
+    .control-wrapper {
+        max-width: 400px;
+    }
+</style>
+
+<h4>Search company</h4>
+
+<div class="control-wrapper">
+    <SfAutoComplete TValue="string" @ref="AutocompleteObj" CssClass="template" TItem="SearchCompanyDto" Placeholder="e.g. AAPL" DataSource="@Companies">
+        <AutoCompleteTemplates TItem="SearchCompanyDto">
+            <ItemTemplate>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3">
+                            <b> @context.Ticker </b>
+                        </div>
+                        <div class="col-9"> @context.Name </div>
+                    </div>
+                </div>
+            </ItemTemplate>
+        </AutoCompleteTemplates>
+        <AutoCompleteFieldSettings Value="Ticker"/>
+        <AutoCompleteEvents TValue="string" TItem="SearchCompanyDto" Filtering="OnFilter" ValueChange="OnValueChange"/>
+    </SfAutoComplete>
+</div>
+
+@code{
+
+    [Parameter]
+    public EventCallback<SearchCompanyDto> OnChooseCompany { get; set; }
+
+    SfAutoComplete<string, SearchCompanyDto> AutocompleteObj { get; set; }
+    List<SearchCompanyDto> Companies = new();
+
+
+    private async Task Search(string input)
+    {
+    // await JsRuntime.InvokeVoidAsync("console.log", input);
+        Companies = await _polygonService.SearchCompany(input) ?? new List<SearchCompanyDto>();
+    }
+
+
+    private Timer _timer;
+    private string _text;
+
+    private string InputString
+    {
+        get => _text;
+        set
+        {
+            if (value == _text) return;
+            _text = value;
+            DisposeTimer();
+            _timer = new Timer(2000);
+            _timer.Elapsed += TimerElapsed_TickAsync;
+            _timer.Enabled = true;
+            _timer.Start();
+        }
+    }
+
+    protected bool SpinnerVisible { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async void TimerElapsed_TickAsync(object sender, ElapsedEventArgs elapsedEventArgs)
+    {
+        DisposeTimer();
+        await OnSearchAsync();
+    }
+
+    private void DisposeTimer()
+    {
+        if (_timer == null) return;
+        _timer.Enabled = false;
+        _timer.Elapsed -= TimerElapsed_TickAsync;
+        _timer.Dispose();
+        _timer = null;
+    }
+
+    private async Task OnSearchAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(_text))
+        {
+            await Search(_text);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnFilter(FilteringEventArgs obj)
+    {
+        InputString = obj.Text;
+    }
+
+    private void OnValueChange(ChangeEventArgs<string, SearchCompanyDto> obj)
+    {
+    // JsRuntime.InvokeVoidAsync("console.log", obj.ItemData.Ticker);
+        OnChooseCompany.InvokeAsync(obj.ItemData);
+    }
+
+}
